@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var TextSchema = new mongoose.Schema({
-  textlink: String,
+  reference: String,
   updated_at: { type: Date, default: Date.now },
 });
 

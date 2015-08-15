@@ -12,11 +12,11 @@ var Image = require('../models/Image.js');
 router.get('/', function(req, res, next) {
   Image.find(function (err, images) {
     if (err) return next(err);
-    res.json(images);
-    	Profile.find(function (err,emails){
-		if (err) return next(err);
-		res.json(emails);	
-	});
+    //res.json(images);
+    	Profile.find(function (err, emails){
+		    if (err) return next(err);
+		    res.json(emails);	
+	   });
   });
 });
 

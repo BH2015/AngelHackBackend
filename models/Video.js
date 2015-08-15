@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var VideoSchema = new mongoose.Schema({
-  videolink: String,
+  reference: String,
   updated_at: { type: Date, default: Date.now },
 });
 
