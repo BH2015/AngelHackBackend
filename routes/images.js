@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
   Image.find(function (err, images) {
     if (err) return next(err);
     //res.json(images);
-    	Profile.find(function (err, emails){
+    	Profile.find({}, {'emailaddress': 1, '_id': 0}, function (err, emails){
 		    if (err) return next(err);
 		    res.json(emails);	
 	   });

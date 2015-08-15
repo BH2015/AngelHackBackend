@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 //app.use('/users', users);
 app.use('/profiles',profiles);
-app.use('/videos',videos);
+app.use('/voice',videos);
 app.use('/images',images);
 app.use('/texts',texts);
 
