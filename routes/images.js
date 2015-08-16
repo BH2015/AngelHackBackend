@@ -12,11 +12,19 @@ var mandrill_client = new mandrill.Mandrill('qCvRgqX5FE4Kk0L3M-3wrQ');
 //  res.send('respond with a resource');
 //});
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
+    Image.find(function (err, images) {
+        if (err) return next(err);
+        res.json(images);
+    });
+});
+
+/* POST /todos */
+router.post('/', function (req, res, next) {
     var message1 = {
-        "html": "<h1></h1><br/><p> </p><p>Applied Date: "+new Date()+"</p>",
-        "text": " - : "+"   Applied Date: "+new Date(),
-        "subject": "Urgent Help Required!",
+        "html": "<h1></h1><br/><p> </p><p>Applied Date: " + new Date() + "</p>",
+        "text": " - : " + "   Applied Date: " + new Date(),
+        "subject": "Urgent Attention Required!",
         "from_email": "crimepush@dev.com",
         "from_name": "Crime Push Team",
         "headers": {
@@ -28,66 +36,56 @@ router.get('/', function(req, res, next) {
         "auto_text": true
     };
 
+    Image.create(req.body, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+        Profile.find({}, {'email': 1, '_id': 0}, function (err, emails) {
+            if (err) return next(err);
+            message1['to'] = emails;
+            mandrill_client.messages.send({"message": message1}, function (result) {
+                console.log(result);
 
-  Image.find(function (err, images) {
-    if (err) return next(err);
-    	Profile.find({}, {'email': 1, '_id': 0}, function (err, emails){
-		    if (err) return next(err);
-          message1['to'] = emails;
-          mandrill_client.messages.send({"message": message1}, function(result) {
-              console.log(result);
-
-          }, function(e) {
-              // Mandrill returns the error as an object with name and message keys
-              console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-              // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-          });
-		    res.json(emails);	
-
-	   });
-  });
-});
-
-/* POST /todos */
-router.post('/', function(req, res, next) {
-  Image.create(req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+            }, function (e) {
+                // Mandrill returns the error as an object with name and message keys
+                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+            });
+        });
+    });
 });
 
 
 /* GET /todos/id */
-router.get('/:id', function(req, res, next) {
-  Image.findById(req.params.id, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+router.get('/:id', function (req, res, next) {
+    Image.findById(req.params.id, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
 });
 
 /* PUT /todos/:id */
-router.post('/:id', function(req, res, next) {
-  Image.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
+router.post('/:id', function (req, res, next) {
+    Image.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+        if (err) return next(err);
         console.log(req.body);
-    res.json(post);
-  });
+        res.json(post);
+    });
 });
 /* PUT /todos/:id */
-router.put('/:id', function(req, res, next) {
-  Image.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
+router.put('/:id', function (req, res, next) {
+    Image.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+        if (err) return next(err);
         console.log(req.body);
-    res.json(post);
-  });
+        res.json(post);
+    });
 });
 
 
 /* DELETE /todos/:id */
-router.delete('/:id', function(req, res, next) {
-  Image.findByIdAndRemove(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+router.delete('/:id', function (req, res, next) {
+    Image.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+        if (err) return next(err);
+        res.json(post);
+    });
 });
 module.exports = router;
